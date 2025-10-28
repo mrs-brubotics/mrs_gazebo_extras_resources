@@ -19,10 +19,14 @@
 #include "gazebo/msgs/msgs.hh"
 #include "gazebo/transport/transport.hh"
 #include <ignition/math/Pose3.hh>
-#include <mrs_msgs/GazeboAttach.h>
-#include <mrs_msgs/GazeboAttachTyped.h>
-#include <mrs_msgs/GazeboDeleteModel.h>
-#include <mrs_msgs/GazeboApplyForce.h>
+// #include <mrs_msgs/GazeboAttach.h>
+// #include <mrs_msgs/GazeboAttachTyped.h>
+// #include <mrs_msgs/GazeboDeleteModel.h>
+// #include <mrs_msgs/GazeboApplyForce.h>
+#include <mrs_gazebo_extras_resources/GazeboAttach.h>
+#include <mrs_gazebo_extras_resources/GazeboAttachTyped.h>
+#include <mrs_gazebo_extras_resources/GazeboDeleteModel.h>
+#include <mrs_gazebo_extras_resources/GazeboApplyForce.h>
 #include <mutex>
 #include <unordered_map>
 
@@ -132,15 +136,15 @@ private:
   void HandleDeletes();
   void HandleForces();
 
-  bool attach_callback(mrs_msgs::GazeboAttach::Request &req, mrs_msgs::GazeboAttach::Response &res);
+  bool attach_callback(mrs_gazebo_extras_resources::GazeboAttach::Request &req, mrs_gazebo_extras_resources::GazeboAttach::Response &res);
 
-  bool detach_callback(mrs_msgs::GazeboAttach::Request &req, mrs_msgs::GazeboAttach::Response &res);
+  bool detach_callback(mrs_gazebo_extras_resources::GazeboAttach::Request &req, mrs_gazebo_extras_resources::GazeboAttach::Response &res);
 
-  bool attach_typed_callback(mrs_msgs::GazeboAttachTyped::Request &req, mrs_msgs::GazeboAttachTyped::Response &res);
+  bool attach_typed_callback(mrs_gazebo_extras_resources::GazeboAttachTyped::Request &req, mrs_gazebo_extras_resources::GazeboAttachTyped::Response &res);
 
-  bool delete_callback(mrs_msgs::GazeboDeleteModel::Request &req, mrs_msgs::GazeboDeleteModel::Response &res);
+  bool delete_callback(mrs_gazebo_extras_resources::GazeboDeleteModel::Request &req, mrs_gazebo_extras_resources::GazeboDeleteModel::Response &res);
 
-  bool apply_force_callback(mrs_msgs::GazeboApplyForce::Request &req, mrs_msgs::GazeboApplyForce::Response &res);
+  bool apply_force_callback(mrs_gazebo_extras_resources::GazeboApplyForce::Request &req, mrs_gazebo_extras_resources::GazeboApplyForce::Response &res);
 
   common::Time prevUpdateTime;
   common::Time updatePeriod;
@@ -389,7 +393,7 @@ bool GazeboRosLinkAttacher::getJoint(std::string model1, std::string link1, std:
   return false;
 }
 
-bool GazeboRosLinkAttacher::attach_callback(mrs_msgs::GazeboAttach::Request &req, mrs_msgs::GazeboAttach::Response &res) {
+bool GazeboRosLinkAttacher::attach_callback(mrs_gazebo_extras_resources::GazeboAttach::Request &req, mrs_gazebo_extras_resources::GazeboAttach::Response &res) {
   ROS_INFO_STREAM("[GazeboRosLinkAttacher]: Received request to attach model: '"
                   << req.model_name_1 << "' using link: '" << req.link_name_1 << "' with model: '" << req.model_name_2 << "' using link: '" << req.link_name_2
                   << "'");
@@ -403,7 +407,7 @@ bool GazeboRosLinkAttacher::attach_callback(mrs_msgs::GazeboAttach::Request &req
   return true;
 }
 
-bool GazeboRosLinkAttacher::attach_typed_callback(mrs_msgs::GazeboAttachTyped::Request &req, mrs_msgs::GazeboAttachTyped::Response &res) {
+bool GazeboRosLinkAttacher::attach_typed_callback(mrs_gazebo_extras_resources::GazeboAttachTyped::Request &req, mrs_gazebo_extras_resources::GazeboAttachTyped::Response &res) {
   ROS_INFO_STREAM("[GazeboRosLinkAttacher]: Received request to attach model: '"
                   << req.model_name_1 << "' using link: '" << req.link_name_1 << "' with model: '" << req.model_name_2 << "' using link: '" << req.link_name_2
                   << "' and joint '" << req.joint_type << "'");
@@ -428,7 +432,7 @@ bool GazeboRosLinkAttacher::attach_typed_callback(mrs_msgs::GazeboAttachTyped::R
   return true;
 }
 
-bool GazeboRosLinkAttacher::detach_callback(mrs_msgs::GazeboAttach::Request &req, mrs_msgs::GazeboAttach::Response &res) {
+bool GazeboRosLinkAttacher::detach_callback(mrs_gazebo_extras_resources::GazeboAttach::Request &req, mrs_gazebo_extras_resources::GazeboAttach::Response &res) {
   ROS_INFO_STREAM("[GazeboRosLinkAttacher]: Received request to detach model: '"
                   << req.model_name_1 << "' using link: '" << req.link_name_1 << "' with model: '" << req.model_name_2 << "' using link: '" << req.link_name_2
                   << "'");
@@ -442,7 +446,7 @@ bool GazeboRosLinkAttacher::detach_callback(mrs_msgs::GazeboAttach::Request &req
   return true;
 }
 
-bool GazeboRosLinkAttacher::delete_callback(mrs_msgs::GazeboDeleteModel::Request &req, mrs_msgs::GazeboDeleteModel::Response &res) {
+bool GazeboRosLinkAttacher::delete_callback(mrs_gazebo_extras_resources::GazeboDeleteModel::Request &req, mrs_gazebo_extras_resources::GazeboDeleteModel::Response &res) {
   ROS_INFO_STREAM("[GazeboRosLinkAttacher]: Received request to delete model: '" << req.model_name << "'");
 
   {
@@ -454,7 +458,7 @@ bool GazeboRosLinkAttacher::delete_callback(mrs_msgs::GazeboDeleteModel::Request
   return true;
 }
 
-bool GazeboRosLinkAttacher::apply_force_callback(mrs_msgs::GazeboApplyForce::Request &req, mrs_msgs::GazeboApplyForce::Response &res) {
+bool GazeboRosLinkAttacher::apply_force_callback(mrs_gazebo_extras_resources::GazeboApplyForce::Request &req, mrs_gazebo_extras_resources::GazeboApplyForce::Response &res) {
   ROS_INFO_THROTTLE(1.0, "[GazeboRosLinkAttacher]: Received request to continuously apply force [%.2fN, %.2fN, %.2fN] to model: '%s'", req.force[0],
                     req.force[1], req.force[2], req.model_name.c_str());
 
