@@ -13,10 +13,14 @@ set(CATKIN_DEPENDENCIES
   tf2
   tf2_msgs
   tf2_ros
+  message_generation
+  genmsg
   )
 
 find_package(catkin REQUIRED COMPONENTS
   ${CATKIN_DEPENDENCIES}
+    message_generation
+    message_runtime
   )
 
 # include Gazebo
@@ -41,9 +45,25 @@ set(LIBRARIES
   MrsGazeboExtrasResources_AttacherPlugin MrsGazeboExtrasResources_ThermalCameraPlugin
   )
 
+## Declare service files
+add_service_files(
+  FILES
+  GazeboApplyForce.srv
+  GazeboAttach.srv
+  GazeboAttachTyped.srv
+  GazeboDeleteModel.srv
+)
+
+## Generate headers
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
 catkin_package(
   DEPENDS GAZEBO Boost
-  CATKIN_DEPENDS ${CATKIN_DEPENDENCIES}
+  CATKIN_DEPENDS ${CATKIN_DEPENDENCIES} message_generation
   LIBRARIES ${LIBRARIES}
   )
 
